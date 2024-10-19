@@ -25,12 +25,14 @@ public class SellerService {
     private final SellerMapper sellerMapper;
 
     public SellerService(ITransactionRepository iTransactionRepository, ISellerRepository iSellerRepository, SellerMapper sellerMapper) {
+
         this.iTransactionRepository = iTransactionRepository;
         this.iSellerRepository = iSellerRepository;
         this.sellerMapper = sellerMapper;
     }
 
     public List<SellerDTO> getAllSellers() {
+
         List<SellerDTO> sellerDTOs = iSellerRepository.findAll()
                 .stream()
                 .map(sellerMapper::toDTO)
@@ -44,6 +46,7 @@ public class SellerService {
     }
 
     public SellerDTO getSellerById(Long id) {
+
         Seller seller = iSellerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Seller not found with id " + id));
 
@@ -51,6 +54,7 @@ public class SellerService {
     }
 
     public SellerWithTotalAmountDTO getMostProductiveSeller(LocalDateTime start, LocalDateTime end) {
+
         Map.Entry<Seller, BigDecimal> mostProductiveSellerWithAmount = iSellerRepository.findAll().stream()
                 .map(seller -> {
                     BigDecimal totalAmount = iTransactionRepository.findBySellerAndTransactionDateBetween(seller, start, end)
@@ -69,6 +73,7 @@ public class SellerService {
     }
 
     public List<SellerWithTotalAmountDTO> getSellersWithTotalAmountLessThan(BigDecimal amount, LocalDateTime start, LocalDateTime end) {
+
         List<AbstractMap.SimpleEntry<Seller, BigDecimal>> sellersWithTotalAmount = iSellerRepository.findAll().stream()
                 .map(seller -> {
                     BigDecimal total = iTransactionRepository.findBySellerAndTransactionDateBetween(seller, start, end)
@@ -93,12 +98,14 @@ public class SellerService {
     }
 
     public SellerDTO createSeller(SellerDTO sellerDTO) {
+
         Seller seller = sellerMapper.toEntity(sellerDTO);
         Seller savedSeller = iSellerRepository.save(seller);
         return sellerMapper.toDTO(savedSeller);
     }
 
     public SellerDTO updateSeller(Long id, SellerDTO sellerDTO) {
+
         Seller existingSeller = iSellerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Seller not found with id " + id));
 
@@ -110,6 +117,7 @@ public class SellerService {
     }
 
     public void deleteSeller(Long id) {
+
         Seller deletedSeller = iSellerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Seller not found with id " + id));
         iSellerRepository.delete(deletedSeller);

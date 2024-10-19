@@ -20,12 +20,14 @@ public class TransactionService {
     private final TransactionMapper transactionMapper;
 
     public TransactionService(ITransactionRepository iTransactionRepository, ISellerRepository iSellerRepository, TransactionMapper transactionMapper) {
+
         this.iTransactionRepository = iTransactionRepository;
         this.iSellerRepository = iSellerRepository;
         this.transactionMapper = transactionMapper;
     }
 
     public List<TransactionDTO> getAllTransactions() {
+
         List<Transaction> transactions = iTransactionRepository.findAll();
         if (transactions.isEmpty()) {
             throw new ResourceNotFoundException("No transactions found");
@@ -37,6 +39,7 @@ public class TransactionService {
     }
 
     public TransactionDTO getTransactionById(Long id) {
+
         Transaction transaction = iTransactionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Transaction not found with id " + id));
 
@@ -44,6 +47,7 @@ public class TransactionService {
     }
 
     public List<TransactionDTO> getTransactionsBySellerId(Long sellerId) {
+
         List<Transaction> transactions = iTransactionRepository.findBySellerId(sellerId);
         if (transactions.isEmpty()) {
             throw new ResourceNotFoundException("No transactions found for seller with id " + sellerId);
@@ -55,6 +59,7 @@ public class TransactionService {
     }
 
     public TransactionDTO createTransaction(Long sellerId, TransactionDTO transactionDTO) {
+
         Seller seller = iSellerRepository.findById(sellerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Seller not found with id " + sellerId));
 

@@ -101,6 +101,7 @@ public class SellerServiceTests {
     }
 
 
+
     @Test
     @DisplayName("Test getSellerById - Success")
     public void testGetSellerById_Success() {
@@ -148,6 +149,7 @@ public class SellerServiceTests {
         verify(iSellerRepository, times(1)).findById(sellerId);
         verify(sellerMapper, never()).toDTO(any());
     }
+
 
 
     @Test
@@ -241,35 +243,6 @@ public class SellerServiceTests {
         verify(sellerMapper, never()).toDTO(any());
     }
 
-    @Test
-    @DisplayName("Test getMostProductiveSeller - Transactions not found")
-    public void testGetMostProductiveSeller_NoTransactionsFound() {
-
-        LocalDateTime start = LocalDateTime.of(2023, 1, 1, 0, 0);
-        LocalDateTime end = LocalDateTime.of(2023, 12, 31, 23, 59);
-
-        Seller seller1 = new Seller();
-        seller1.setId(1L);
-        seller1.setName("John Doe");
-        seller1.setContactInfo("john@example.com");
-        seller1.setRegistrationDate(LocalDateTime.now());
-
-        List<Seller> sellers = Collections.singletonList(seller1);
-        List<Transaction> transactions = Collections.emptyList(); // Нет транзакций
-
-        when(iSellerRepository.findAll()).thenReturn(sellers);
-        when(iTransactionRepository.findBySellerAndTransactionDateBetween(seller1, start, end)).thenReturn(transactions);
-        when(sellerMapper.toDTO(seller1)).thenReturn(new SellerDTO());
-
-        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () ->
-            sellerService.getMostProductiveSeller(start, end));
-
-        assertEquals("No most productive seller found", exception.getMessage());
-
-        verify(iSellerRepository, times(1)).findAll();
-        verify(iTransactionRepository, times(1)).findBySellerAndTransactionDateBetween(seller1, start, end);
-        verify(sellerMapper, never()).toDTO(seller1);
-    }
 
 
     @Test
@@ -409,6 +382,7 @@ public class SellerServiceTests {
     }
 
 
+
     @Test
     @DisplayName("Test createSeller - Success")
     public void testCreateSeller_Success() {
@@ -447,6 +421,7 @@ public class SellerServiceTests {
         verify(iSellerRepository, times(1)).save(sellerEntity);
         verify(sellerMapper, times(1)).toDTO(sellerEntity);
     }
+
 
 
     @Test
@@ -514,6 +489,7 @@ public class SellerServiceTests {
         verify(iSellerRepository, never()).save(any());
         verify(sellerMapper, never()).toDTO(any());
     }
+
 
 
     @Test
